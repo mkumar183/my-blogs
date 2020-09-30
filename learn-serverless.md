@@ -38,3 +38,21 @@ https://ci.schoologize.com/deploy/viewDeploymentResult.action?deploymentResultId
 
 
 [Serverlesss Best Practices](https://medium.com/@PaulDJohnston/serverless-best-practices-b3c97d551535)
+
+#### to run serverless msteam project 
+switch to branch 
+to enable nvm follow command on readme: 
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+It will print 3 commands. copy and run these. 
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+nvm is enabled. 
+nvm install 12.13.0
+nvm use 12.13.0
+
+yarn install
+You are ready !
+
