@@ -123,3 +123,16 @@ fetch = +refs/heads/*:refs/remotes/origin/*
 4. Do a git push: git push --all . It will push all codes and commit history on your newly GitHub repository.
 5. Done. After that, when we push new commits, it will push to GitHub only.
 6. The Bitbucket/GitLab repo now can be archived to ‘Read-only’ mode.
+
+
+#### Push existing folder to github repo
+[push existing project to github](https://docs.github.com/en/free-pro-team@latest/github/importing-your-projects-to-github/adding-an-existing-project-to-github-using-the-command-line)
+
+#### Switch branch
+first ensure there are no pending changes. these changes need to be stashed 
+to switch to a remote branch go to master first then type
+git checkout -t origin/<branch-name> --This will checkout the remote and set you there up. 
+
+#### Delete branch
+to delete local branch
+git branch -D msft-teams-server  -- this should be done when you are not on that branch. like from master
