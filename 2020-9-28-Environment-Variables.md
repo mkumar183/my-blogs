@@ -22,3 +22,6 @@ In docker these are created in dockerfile using
     ENV ghi=$abc
 ``` 
 
+![Bamboo Env Variables](/images/Environment-Variables-Bamboo-Plan.png)
+
+
