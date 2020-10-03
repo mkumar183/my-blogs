@@ -1,8 +1,3 @@
----
-layout: post
-title: Technical Terms 
----
-
 ##### Where are environment variables stored for cloud
 For cloud each cloud provider provides place to store environment variables. 
 
@@ -27,3 +22,6 @@ In docker these are created in dockerfile using
 #### Killing service on a port
 lsof -i :3000
 kill -9 <PID>
+
+
+[consul article on medium](https://medium.com/velotio-perspectives/a-practical-guide-to-hashicorp-consul-part-1-5ee778a7fcf4)
