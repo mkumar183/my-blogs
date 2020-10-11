@@ -1,6 +1,4 @@
 #### Generating Oauth 1.0 Signature ! 
-
-
 [comment]:![_config.yml]({{ site.baseurl }}/images/config.png)
 
 https://stackabuse.com/authentication-and-authorization-with-jwts-in-express-js/
@@ -10,47 +8,32 @@ OAuth 1.0 only handled web workflows, but OAuth 2.0 considers non-web clients as
 
 ##### Introduce middleware
 We introduced express middleware in order to perform this authentication
-prior to calling the client application. In our case client application
-is rendered at server side so we did not have to pass any tokens
-to this application. 
+prior to calling the client application. you can choose to use serverless lambda express function for this as well. 
+Use serverless typescript template for the same. 
 
 ##### How Oath Signatures are Generated 
-Oath signature is generated based on below method: <br>
-
-```
-   const oauth_signature = crypto  
-     .createHmac('sha1', signing_key) 
-     .update(signature_base_string) 
-     .digest() 
-     .toString('base64'); 
-```
+Use oauth1.0 library mentioned below. 
 
 ##### Full code including constructing base string
+//TODO: Need to create working code and share but this should give folks idea for now. 
 ```
-    const encodedKey = encodeURIComponent(k);
-    const encodedValue = escape(ordered[k]); // in our case had to skip certain elements 
+    const consumer: OauthConsumerDomain = {
+      key: process.env.APP_CONSUMER_KEY!,
+      secret: process.env.APP_CONSUMER_SECRET!,
+    };
 
-    // in our case had to re-encode certain parameters
-    if (encodedParameters === '') {
-      encodedParameters += encodeURIComponent(`${encodedKey}=${encodedValue}`);
-    } else {
-      encodedParameters += encodeURIComponent(`&${encodedKey}=${encodedValue}`);
+    // TODO: Investigate issue with https in local environment
+    const requrl = `${process.env.HTTPS_ENABLED! === '0' ? 'http' : 'https'}://${req.headers.host}${req.url}`;
+
+    try {
+      const expectedSignature = this.oauthSigner.calculateSignature(consumer, RequestUrl, Request);
+      this.ltiBasicLaunchBll.validateBasicLaunch(Request, consumer, expectedSignature);
+
+      return next();
+    } catch (err) {
+      return next(Boom.unauthorized('Unauthorized'));
     }
-
-  const method = 'POST';
-  const base_url = 'http://localhost:3000/';
-  const encodedUrl = encodeURIComponent(base_url);
-  const signature_base_string = `${method}&${encodedUrl}&${encodedParameters}`;
-
-  const secret_key = `yoursecretkey`; // this needs to be moved to config later
-  const signing_key = `${secret_key}&`; //as token is missing in our case.
-  const crypto = require('crypto');
-
-  const oauth_signature = crypto
-    .createHmac('sha1', signing_key)
-    .update(signature_base_string)
-    .digest()
-    .toString('base64');
+  }
 ```
 
 Its important here to know how the signature_base_string is formed. 
@@ -65,16 +48,54 @@ Below url helped me in doing some quick experiments and trying to match
 string used by calling application. 
 [Encoding](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent#:~:text=The%20encodeURIComponent()%20function%20encodes,two%20%22surrogate%22%20characters)  
 
+A better way to generate signature and base string is by using library oauth1.0 
+//TODO: Create proper code for this and check this in personal repo for others reference 
+```
+import OAuth = require('oauth-1.0a');
+
+//create oath object 
+  private createOAuth(consumer: OauthConsumerDomain, signatureMethod: string): OAuth {
+    return new OAuth({
+      consumer,
+      signature_method: signatureMethod,
+      hash_function: (baseString: string, key: string): string => {
+        return crypto
+          .createHmac('sha1', key)
+          .update(baseString)
+          .digest('base64');
+          
+//now form signature
+
+  calculateSignature(consumer: OauthConsumerDomain, endpoint: string, requestParams: OauthRequestDomain): string {
+    //do some validations
+
+    return oauth.getSignature(
+      {
+        url: endpoint,
+        method: 'POST',
+        data: OauthSigner.extractSignableParams(requestParams),
+      },
+      undefined,
+      {
+        oauth_consumer_key: requestParams.oauth_consumer_key,
+        oauth_nonce: requestParams.oauth_nonce,
+        oauth_signature_method: requestParams.oauth_signature_method,
+        oauth_timestamp: requestTimestamp,
+        oauth_version: requestParams.oauth_version,
+        oauth_token: '',
+      },
+    );
+  }
+
+```
+
+And from this library calling 
+
 ##### How to match base string 
-In order match base string, i used vimdiff. I put two windows side by side
-and ensure their width was same by matching first line (fortunately 
-first line was matching). Then we matched line by line (since its all wrapped)
-so this was a laborious exercise. But by looking at each parameters we could 
-figure out where the problems were. Using above url we encoded twice and checked
-if it was a double encoding problem. 
+I tried a complex path but later realized basestring should not be constructed by yourself. It should be left over to oauth1.0 library to do it correctly.  
 
 ##### escape function 
-This function replaces colon (:) by %3A. 
+we need not use escape function since that is also part of forming base string. 
 
 ##### References <br>
 Best Article: 
@@ -82,4 +103,5 @@ Best Article:
 [Oath wp documentation](https://oauth1.wp-api.org/docs/advanced/Web.html) <br>
 [Decode url](https://meyerweb.com/eric/tools/dencoder/)
 [Encoding Experiment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent#:~:text=The%20encodeURIComponent()%20function%20encodes,two%20%22surrogate%22%20characters)  
+Above articles do not refer to the code i mentioned in latest version. The code snippet provided is the final implementation. 
 
