@@ -136,3 +136,6 @@ git checkout -t origin/<branch-name> --This will checkout the remote and set you
 #### Delete branch
 to delete local branch
 git branch -D msft-teams-server  -- this should be done when you are not on that branch. like from master
+
+#### Stashing and Cleaning
+https://git-scm.com/book/en/v2/Git-Tools-Stashing-and-Cleaning

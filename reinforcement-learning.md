@@ -16,3 +16,11 @@ if state has 4 variables and action has 2 then input layer will have 6 neurons.
 
 What network will optimize:
 for each state and action (a batch of) what is the total reward. It will then adjust the weights to maximize the rewards over the batch. this will in turn arrive at weights in such a way that best action will be selected. 
+
+#### Markov State
+You learnt that Markov state is some function of the knowledge base: that captures all relevant information from the knowledge base. The Markov assumption states that the current state contains all the necessary information about the past (states, actions and rewards) to take the next action. All these processes that work in accordance to Markov property are called Markov Decision Processes (popularly called MDPs).
+
+value function of a state: value of a state. a relative number that tell how good particular state is. v(s)
+
+action value function: value of an action in a state q(s,a). total reward given a particular state and action.
+its immediate reward + future rewards with a discount factor.

@@ -73,8 +73,32 @@ so this was a laborious exercise. But by looking at each parameters we could
 figure out where the problems were. Using above url we encoded twice and checked
 if it was a double encoding problem. 
 
+##### Debugging signature mismatch
+Put debug points at: 
+- s_app_lti_app_launch in s_app_lti.inc 
+- s_app_lti_app_launch_if_content_selection (line 470 in same file)
+- OAuthRequestSignerLTI is called from generateLtiLaunchParams in ExternaltoolBill.php
+- file OauthRequest.php line 211 signature. Capture base_string value in a notepad. 
+- match this base_string with the base_string you are forming in your program using vimdiff editor side by side
+- capture base_string from both the places open two vi editors such that line 
+length is same then match first and last character of each line.
+- Debug point at /Users/kumarman/sgy-projects/envy/systems/schoology/lib/sgy-shared/src/sgy-core/schoology/sites/all/misc/oauth/library/OAuthRequest.php line 186 and set the base string to validate.
+
+
+
 ##### escape function 
 This function replaces colon (:) by %3A. 
+
+
+##### Two legged vs Three legged Approach
+First, the legs refer to the roles involved. A typical OAuth flow involves three parties: the end-user (or resource owner), the client (the third-party application), and the server (or authorization server). So a 3-legged flow involves all three.
+
+The term 2-legged is used to describe an OAuth-authenticated request without the end-user involved. Basically, it is a simple client-server authenticated request in which the client credentials (identifier and secret) are used to calculate a request signature instead of sending the secret in the clear.
+
+Implementation wise, 2-legged request are exactly the same but don't include an access token or access token secret. These two values are basically empty strings.
+[reference link](https://stackoverflow.com/questions/5593348/difference-between-oauth-2-0-two-legged-and-three-legged-implementation#:~:text=A%20typical%20OAuth%20flow%20involves,without%20the%20end%2Duser%20involved.)
+
+
 
 ##### References <br>
 Best Article: 
@@ -82,4 +106,11 @@ Best Article:
 [Oath wp documentation](https://oauth1.wp-api.org/docs/advanced/Web.html) <br>
 [Decode url](https://meyerweb.com/eric/tools/dencoder/)
 [Encoding Experiment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent#:~:text=The%20encodeURIComponent()%20function%20encodes,two%20%22surrogate%22%20characters)  
+
+
+#### After discussion with Perry
+Made an entry in package.json for "oauth-1.0a": "^2.2.5",
+yarn install 
+
+
 
