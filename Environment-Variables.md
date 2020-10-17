@@ -1,3 +1,5 @@
+[Comment]: TODO This Article needs more work.
+ 
 ##### Where are environment variables stored for cloud
 For cloud each cloud provider provides place to store environment variables. 
 
@@ -49,3 +51,8 @@ The **third zone** is the closed network zone, primarily designated for data. Th
 Consul Connect enrolls these policies of inter-service communication that we desire and implements it as part of the service graph. So, a policy might say service A can talk to service B, but B cannot talk to C, for example.
 
 Read about similarity and differences between Consul and Zookeeper, doozerd, or etcd..
+
+
+https://www.twilio.com/blog/working-with-environment-variables-in-node-js-html
+in node.js
+> console.log(process.env);

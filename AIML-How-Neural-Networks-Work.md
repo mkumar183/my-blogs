@@ -1,4 +1,4 @@
-### how neural networks work
+### How neural networks work
 Fundamentally, each neuron in a neural network is just a mathematical function. Each neuron computes a weighted sum of its inputs—the larger an input's weight, the more that input affects the neuron's output. This weighted sum is then fed into a non-linear function called an activation function—a step that enables neural networks to model complex non-linear phenomena.
 
 The power of Rosenblatt's early perceptron experiments—and of neural networks more generally—comes from their capacity to "learn" from examples. A neural network is trained by adjusting neuron input weights based on the network's performance on example inputs. **If the network classifies an image correctly, weights contributing to the correct answer are increased, while other weights are decreased. If the network misclassifies an image, the weights are adjusted in the opposite direction.**
