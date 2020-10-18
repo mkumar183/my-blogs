@@ -24,4 +24,5 @@ Now comes more advancement in the systems where not every organization wants to 
 
 ##### Multi-Tenant / SaaS Based Applications vs On Premise Applications 
 
-
+Quote:
+> A program is a series of transitions among states.
